@@ -3,7 +3,7 @@ package com.example.bankingsystem.Controller;
 import com.example.bankingsystem.Dto.TransferReq;
 import com.example.bankingsystem.Dto.TransferResp;
 import com.example.bankingsystem.Entity.TransactionModel;
-import com.example.bankingsystem.Service.TransactionService;
+import com.example.bankingsystem.Service.TransactionServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,28 +12,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/transactions")
 public class TransactionController {
+private final TransactionServiceImpl transactionServiceImpl;
 
-    private final TransactionService transactionService;
-
-    public TransactionController(TransactionService transactionService) {
-        this.transactionService = transactionService;
+    public TransactionController(TransactionServiceImpl transactionServiceImpl) {
+        this.transactionServiceImpl = transactionServiceImpl;
+    }
+    @PostMapping("/sendmoney")
+    public TransferResp Transfer(@RequestBody TransferReq req){
+    return transactionServiceImpl.Transfer(req);
     }
 
-    @PostMapping("/transfer")
-    public ResponseEntity<TransferResp> transfer(@RequestBody TransferReq req) {
-        return ResponseEntity.ok(transactionService.Transfer(req));
+    @PostMapping("/addmoney")
+    public TransferResp ReceiveMoney(@RequestBody String accountNumber, long amount){
+        return transactionServiceImpl.ReceiveMoney(accountNumber, amount);
     }
-
-    @PostMapping("/receive")
-    public ResponseEntity<TransferResp> receiveMoney(
-            @RequestParam String accountNumber,
-            @RequestParam long amount
-    ) {
-        return ResponseEntity.ok(transactionService.ReceiveMoney(accountNumber, amount));
-    }
-
-    @GetMapping("/history/{accountNumber}")
-    public ResponseEntity<List<TransactionModel>> getHistory(@PathVariable String accountNumber) {
-        return ResponseEntity.ok(transactionService.getTransactionHistory(accountNumber));
+    @GetMapping("/viewHistory")
+    public List<TransactionModel> getTransactionHistory(@PathVariable String accountNumber){
+        return transactionServiceImpl.getTransactionHistory(accountNumber);
     }
 }
+

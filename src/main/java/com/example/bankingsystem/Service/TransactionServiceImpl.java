@@ -21,7 +21,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@Transactional
 public class TransactionServiceImpl implements TransactionService{
     private final MerchantRepo merchantRepo;
     private final TransactionRepo transactionRepo;
@@ -63,7 +62,6 @@ public class TransactionServiceImpl implements TransactionService{
             return TransactionMapper.mapToDto(existingTxn.get());
         }
 
-        // Perform transfer
         sender.setAccountBalance(sender.getAccountBalance() - req.getAmount());
         receiver.setAccountBalance(receiver.getAccountBalance() + req.getAmount());
 
