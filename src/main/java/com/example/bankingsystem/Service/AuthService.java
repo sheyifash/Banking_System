@@ -11,4 +11,5 @@ public interface AuthService {
     public AuthResp Register(AuthReq req);
     public AuthResp LogIn(AuthReq req);
     public ForgotPasswordResp ForgotPassWord(ForgotPassWordReq forgotPassWordReq);
+
 }
