@@ -1,9 +1,6 @@
 package com.example.bankingsystem.Controller;
 
-import com.example.bankingsystem.Dto.AuthReq;
-import com.example.bankingsystem.Dto.AuthResp;
-import com.example.bankingsystem.Dto.ForgotPassWordReq;
-import com.example.bankingsystem.Dto.ForgotPasswordResp;
+import com.example.bankingsystem.Dto.*;
 import com.example.bankingsystem.Service.AuthImpl;
 import com.example.bankingsystem.Service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,11 +15,9 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Authentication", description = "Endpoints for registration, login and forgot password")
 public class AuthController {
 
-    private final AuthService authService;
     private final AuthImpl authImpl;
 
-    public AuthController(AuthService authService, AuthImpl authImpl) {
-        this.authService = authService;
+    public AuthController(AuthImpl authImpl) {
         this.authImpl = authImpl;
     }
 
@@ -37,19 +32,19 @@ public class AuthController {
             @ApiResponse(responseCode = "409", description = "User already exists")
     })
 
-    public AuthResp Register(@RequestBody AuthReq req){
-        return authImpl.Register(req);
+    public AuthResp register(@RequestBody AuthReq req){
+        return authImpl.register(req);
     }
 
     @PostMapping("/login")
-    public AuthResp login(@RequestBody AuthReq req) {
-        return authImpl.LogIn(req);
+    public LogInRes logIn(@RequestBody LogInReq req) {
+        return authImpl.logIn(req);
     }
 
     @PostMapping("/forgot-password")
     public ForgotPasswordResp forgotPassword(
             @RequestBody ForgotPassWordReq req
     ) {
-        return authImpl.ForgotPassWord(req);
+        return authImpl.forgotPassWord(req);
     }
 }

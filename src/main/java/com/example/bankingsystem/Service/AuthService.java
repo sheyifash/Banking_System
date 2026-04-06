@@ -1,15 +1,12 @@
 package com.example.bankingsystem.Service;
 
-import com.example.bankingsystem.Dto.AuthReq;
-import com.example.bankingsystem.Dto.AuthResp;
-import com.example.bankingsystem.Dto.ForgotPassWordReq;
-import com.example.bankingsystem.Dto.ForgotPasswordResp;
+import com.example.bankingsystem.Dto.*;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface AuthService {
-    public AuthResp Register(AuthReq req);
-    public AuthResp LogIn(AuthReq req);
-    public ForgotPasswordResp ForgotPassWord(ForgotPassWordReq forgotPassWordReq);
+    public AuthResp register(AuthReq req);
+    public LogInRes logIn(LogInReq req);
+    public ForgotPasswordResp forgotPassWord(ForgotPassWordReq forgotPassWordReq);
 
 }

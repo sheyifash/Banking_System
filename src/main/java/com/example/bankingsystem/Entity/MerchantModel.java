@@ -37,7 +37,7 @@ public class MerchantModel implements UserDetails {
     private String email;
     @Column
     @NotBlank
-    private String passWord;
+    private String password;
     @Column
     @NotBlank
     private String pin;
@@ -61,12 +61,12 @@ public class MerchantModel implements UserDetails {
 
     @Override
     public @Nullable String getPassword() {
-        return "passWord";
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return "email";
+        return email;
     }
 
     public @NotBlank String getAccountNumber(String accountNumber) {

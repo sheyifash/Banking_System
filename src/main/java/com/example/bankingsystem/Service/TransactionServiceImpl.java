@@ -5,6 +5,9 @@ import com.example.bankingsystem.Dto.TransferResp;
 import com.example.bankingsystem.Entity.MerchantModel;
 import com.example.bankingsystem.Entity.TransactionModel;
 import com.example.bankingsystem.Enum.Status;
+import com.example.bankingsystem.Exception.InsufficientBalance;
+import com.example.bankingsystem.Exception.InvalidAmount;
+import com.example.bankingsystem.Exception.ResourceNotFound;
 import com.example.bankingsystem.Mapper.TransactionMapper;
 import com.example.bankingsystem.Repo.MerchantRepo;
 import com.example.bankingsystem.Repo.TransactionRepo;
@@ -31,23 +34,24 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
-    public TransferResp Transfer(TransferReq req) {
+    public TransferResp Transfer(TransferReq req, Authentication auth) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String senderEmail = authentication.getName();
+        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String senderEmail = auth.getName();
 
         MerchantModel sender = merchantRepo.findByEmail(senderEmail)
-                .orElseThrow(() -> new RuntimeException("Sender not found"));
+                .orElseThrow(() -> new ResourceNotFound("Sender not found"));
 
         MerchantModel receiver = merchantRepo.findByAccountNumber(req.getAccountNumber())
-                .orElseThrow(() -> new RuntimeException("Recipient does not exist"));
-
+                .orElseThrow(() -> new ResourceNotFound("Recipient does not exist"));
         if (sender.getAccountNumber().equals(receiver.getAccountNumber())) {
+            System.out.println("You cannot transfer to yourself");
             throw new RuntimeException("You cannot transfer to yourself");
         }
 
         if (sender.getAccountBalance() < req.getAmount()) {
-            throw new RuntimeException("Insufficient Balance");
+            System.out.println("Insufficient Balance");
+            throw new InsufficientBalance("Insufficient Balance");
         }
 
         String idempotencyKey = req.getIdempotencyKey();
@@ -86,10 +90,10 @@ public class TransactionServiceImpl implements TransactionService{
     public TransferResp ReceiveMoney(String accountNumber, long amount) {
 
         MerchantModel receiver = merchantRepo.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new RuntimeException("Account not found"));
+                .orElseThrow(() -> new ResourceNotFound("Account not found"));
 
         if (amount <= 0) {
-            throw new RuntimeException("Invalid amount");
+            throw new InvalidAmount("Invalid amount");
         }
 
         receiver.setAccountBalance(receiver.getAccountBalance() + amount);

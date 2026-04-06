@@ -24,7 +24,7 @@ public class MerchantMapper{
         authModel.setLastName(request.getLastName());
         authModel.setEmail(request.getEmail());
         authModel.setMobileNumber(request.getMobileNumber());
-        authModel.setPassWord(request.getPassWord());
+        authModel.setPassword(request.getPassword());
         authModel.setPin(request.getPin());
         return authModel;
     }

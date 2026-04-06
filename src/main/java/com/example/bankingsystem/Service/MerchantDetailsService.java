@@ -2,11 +2,12 @@ package com.example.bankingsystem.Service;
 
 import com.example.bankingsystem.Entity.MerchantModel;
 import com.example.bankingsystem.Repo.MerchantRepo;
-import com.example.bankingsystem.Repo.MerchantRepo;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class MerchantDetailsService implements UserDetailsService {
@@ -18,11 +19,9 @@ public class MerchantDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        MerchantModel merchant = merchantRepo.findByUsername(email);
-        if (merchant == null){
-            System.out.println("Merchant not found");
-            throw new UsernameNotFoundException("Merchant not found");
-        }
+        MerchantModel merchant = merchantRepo.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Merchant not found"));
+        System.out.println("LOADED PASSWORD: " + merchant.getPassword());
         return merchant;
     }
 }

@@ -7,21 +7,16 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Data
 @Builder
+@Data
 @AllArgsConstructor
-public class AuthResp {
+public class LogInRes {
     private String message;
     private Status status;
     private String token;
-    private String accountNumber;
-    private long accountBalance;
-    private LocalDateTime createdAt;
+    private LocalDateTime loggedInAt;
 
-    public AuthResp(String token) {
+    public LogInRes(String token) {
     }
 
-    public AuthResp() {
-
-    }
 }

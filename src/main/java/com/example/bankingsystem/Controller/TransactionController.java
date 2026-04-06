@@ -5,6 +5,7 @@ import com.example.bankingsystem.Dto.TransferResp;
 import com.example.bankingsystem.Entity.TransactionModel;
 import com.example.bankingsystem.Service.TransactionServiceImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +19,8 @@ private final TransactionServiceImpl transactionServiceImpl;
         this.transactionServiceImpl = transactionServiceImpl;
     }
     @PostMapping("/sendmoney")
-    public TransferResp Transfer(@RequestBody TransferReq req){
-    return transactionServiceImpl.Transfer(req);
+    public TransferResp Transfer(@RequestBody TransferReq req, Authentication auth){
+    return transactionServiceImpl.Transfer(req, auth);
     }
 
     @PostMapping("/addmoney")
